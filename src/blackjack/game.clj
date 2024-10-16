@@ -43,5 +43,19 @@
      :cards  cards
      :points points}))
 
-(card/print-player (player "Rodrigo"))
-(card/print-player (player "Miguel"))
+; chamar a funcao new-card para gerar a nova carta
+; atualizar o vetor cards dentro do player com a nova carta
+; calcular os pontos do jogador com o novo vetor de cartas
+; retornar esse novo jogador
+(defn more-card [player]
+  (let [card (new-card)
+        cards (conj (:cards player) card)
+        new-player (assoc player :cards cards)
+        points (points-cards cards)]
+    (assoc new-player :points points)))
+
+(def player (player "Rodrigo"))
+(card/print-player (more-card player))
+
+;(card/print-player (player "Rodrigo"))
+;(card/print-player (player "Miguel"))
