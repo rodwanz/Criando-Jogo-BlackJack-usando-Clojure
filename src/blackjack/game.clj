@@ -50,7 +50,7 @@
 (defn more-card [player]
   (let [card (new-card)
         cards (conj (:cards player) card)
-        new-player (assoc player :cards cards)
+        new-player (update player :cards conj card)
         points (points-cards cards)]
     (assoc new-player :points points)))
 
