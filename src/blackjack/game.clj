@@ -54,8 +54,14 @@
         points (points-cards cards)]
     (assoc new-player :points points)))
 
-(def player (player "Rodrigo"))
-(card/print-player (more-card player))
+(defn game [player]
+  (println (:player-name player) ": mais cartas")
+  (if (= (read-line) "sim")
+    (let [player-with-more-cards (more-card player)]
+      (card/print-player player-with-more-cards)
+      (game player-with-more-cards))
+    player))
 
-;(card/print-player (player "Rodrigo"))
-;(card/print-player (player "Miguel"))
+(def player-1 (player "Rodrigo"))
+(card/print-player  player-1)
+(game player-1)
