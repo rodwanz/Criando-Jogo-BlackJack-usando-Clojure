@@ -54,29 +54,29 @@
         points (points-cards cards)]
     (assoc new-player :points points)))
 
-(defn player-decision-continue? []
+(defn player-decision-continue? [oponent-points hook]
   (= (read-line) "sim"))
 
 (defn hook-decicion-continue? [player-points hook]
   (let [hook-points (:points hook)]
-    (< hook-points player-points)))
+    (<= hook-points player-points)))
 
 ; chamar a funcao new-card para gerar a nova carta
 ; atualizar o vetor cards dentro do player com a nova carta
 ; calcular os pontos do jogador com o novo vetor de cartas
 ; retornar esse novo jogador
-(defn game [player]
+(defn game [player fn-decision-continue?]
   (println (:player-name player) ": mais cartas")
-  (if (hook-decicion-continue? 18 player)
+  (if (fn-decision-continue? 18 player)
     (let [player-with-more-cards (more-card player)]
       (card/print-player player-with-more-cards)
-      (game player-with-more-cards))
+      (game player-with-more-cards fn-decision-continue?))
     player))
 
-;(def player-1 (player "Rodrigo"))
-;(card/print-player  player-1)
+(def player-1 (player "Rodrigo"))
+(card/print-player  player-1)
 
 (def hook (player "Hook"))
 (card/print-player  hook)
-;(game player-1)
-(game hook)
+(game player-1 player-decision-continue?)
+(game hook hook-decicion-continue?)
