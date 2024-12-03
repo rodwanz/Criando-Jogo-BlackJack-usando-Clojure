@@ -1,7 +1,7 @@
 (ns blackjack.test2)
 
 (def momento "momento de acertar")
-(def e "Agora")
+(def e "agora")
 
 (defn ousadia
   "entendendo mais"

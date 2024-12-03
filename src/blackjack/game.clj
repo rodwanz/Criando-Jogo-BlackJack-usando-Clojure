@@ -57,7 +57,7 @@
 (defn player-decision-continue? [hook]
   (= (read-line) "sim"))
 
-(defn hook-decicion-continue? [player-points hook]
+(defn hook-decision-continue? [player-points hook]
   (let [hook-points (:points hook)]
     (<= hook-points player-points)))
 
@@ -73,10 +73,35 @@
       (recur player-with-more-cards fn-decision-continue?))
     player))
 
+; se ambos passaram de 21 -> ambos perderam
+; se pontos iguais -> empatou
+; se player passou de 21 -> dealer ganhou
+; se dealer passou de 21 -> player ganhou
+; se player maior que dealer -> player ganhou
+; se dealer maior que player -> dealer ganhou
+(defn and-game [player-1 hook]
+  (let [player-points (:points player-1)
+        hook-points (:points hook)
+        player-name (:player-name player-1)
+        hook-name (:player-name hook)
+        message (cond
+                  (and (> player-points 21) (> hook-points 21)) "Ambos perderam"
+                  (= player-points hook-points) "Empatou"
+                  (> player-points 21) (str hook-name "Ganhou")
+                  (> hook-points 21) (str player-name "Ganhou")
+                  (> player-points hook-points) (str player-name "Ganhou")
+                  (> hook-points player-points) (str hook-name "Ganhou"))]
+    (card/print-player player-1)
+    (card/print-player hook)
+    (print message)))
+
 (def player-1 (player "Rodrigo"))
 (card/print-player  player-1)
 
 (def hook (player "Hook"))
 (card/print-player  hook)
 (def player-after-game (game player-1 player-decision-continue?))
-(game hook (partial hook-decicion-continue? (:points player-after-game)))
+(def partial-hook-decision-continue? (partial hook-decision-continue? (:points player-after-game)))
+(def hook-after-game (game hook partial-hook-decision-continue?))
+
+(end-game player-after-game hook-after-game)
